@@ -12,6 +12,8 @@ Extension of the previous paper "No Bells, Just Whistles: Sports Field Registrat
 
 - ✅ **Weighting parameter $\alpha$** added to the PnL refinement module, improving performance across all benchmarks.
 
+- ✅ **Lens Distortion** optimization added into ```utils/utils_calib_wp.py``` file
+
 ### 🚀 Updates (2025-06-06)
 
 - ✅ **Support for Distributed GPU Training** for scalable model training across multiple devices.
