@@ -61,8 +61,6 @@ def rotation_matrix_to_pan_tilt_roll(rotation):
     first_roll = np.arctan2(sign_first_tilt * orientation[2, 0], sign_first_tilt * orientation[2, 1])
     second_roll = np.arctan2(sign_second_tilt * orientation[2, 0], sign_second_tilt * orientation[2, 1])
 
-    # print(f"first solution {first_pan*180./np.pi}, {first_tilt*180./np.pi}, {first_roll*180./np.pi}")
-    # print(f"second solution {second_pan*180./np.pi}, {second_tilt*180./np.pi}, {second_roll*180./np.pi}")
     if np.fabs(first_roll) < np.fabs(second_roll):
         return first_pan, first_tilt, first_roll
     return second_pan, second_tilt, second_roll
@@ -100,6 +98,7 @@ class FramebyFrameCalib:
         self.position = None
         self.rotation = None
         self.homography = None
+        self.alpha = 0.7  # weight for line error vs keypoint error in optimizer
 
     def update(self, calibration, kp_dict, lines_dict):
         self.intrinsics = calibration["intrinsics"]
@@ -361,7 +360,7 @@ class FramebyFrameCalib:
                 distance2 = point_to_line_distance(proj1, proj2, np.array([x2, y2]))
                 err2.append([distance1, distance2])
 
-            return np.concatenate((err1, np.array(err2).ravel()))
+            return np.concatenate(((1 - self.alpha) * err1, self.alpha * np.array(err2).ravel()))
 
         else:
             err = []
@@ -380,7 +379,6 @@ class FramebyFrameCalib:
 
         if len(self.obj_pts) == 0:
             return None, None
-
 
         obj_pts, img_pts = self.get_correspondences(mode)
         ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(
@@ -417,7 +415,6 @@ class FramebyFrameCalib:
                     self.position = - np.transpose(self.rotation) @ tvecs
                     rep_err = self.reproj_err(obj_pts, img_pts)
 
-
             if refine_w_lines:
                 if not np.isnan(rep_err):
                     self.lines_consensus()
@@ -429,7 +426,6 @@ class FramebyFrameCalib:
                     if not any(np.isnan(vector_opt)):
                         self.vector_to_params(vector_opt)
                         rep_err = self.reproj_err(obj_pts, img_pts)
-
 
             pan, tilt, roll = rotation_matrix_to_pan_tilt_roll(self.rotation)
 
@@ -593,7 +589,6 @@ class FramebyFrameCalib:
 
             points, proj_points = [], []
             for i in range(len(img_pts)):
-                # if pts[0][i] <= 57:
                 points.append(img_pts[i])
                 proj_point = H @ np.array([obj_pts[i][0], obj_pts[i][1], 1.])
                 scale = proj_point[-1]
@@ -623,10 +618,10 @@ class FramebyFrameCalib:
                 distance2 = point_to_line_distance(proj1, proj2, np.array([x2, y2]))
                 err2.append([distance1, distance2])
 
-            return np.concatenate((0.01*err1, np.array(err2).ravel()))
+            return np.concatenate(((1 - self.alpha) * err1, self.alpha * np.array(err2).ravel()))
         else:
             err = []
-            for i in range(len(img_pts)+len( self.lines_dict_cons)):
+            for i in range(len(img_pts)+len(self.lines_dict_cons)):
                 err.append([np.inf, np.inf])
             return np.array(err).ravel()
 
@@ -651,7 +646,7 @@ class FramebyFrameCalib:
                         vector = H.flatten()[:-1]
                         res = least_squares(self.line_optimizer_ground, vector, verbose=0, ftol=1e-4, x_scale="jac",
                                             method='lm', args=(img_pts, obj_pts))
-    
+
                         vector_opt = res['x']
                         if not any(np.isnan(vector_opt)):
                             H = np.append(vector_opt, 1).reshape(3, 3)
@@ -684,7 +679,6 @@ class FramebyFrameCalib:
             for res in final_results:
                 if res['mode'] == 'full' and res['use_ransac'] == 0 and res['rep_err'] <= 5.:
                     return res
-            # Return the first element in the sorted list (if it's not empty)
             return final_results[0]
         else:
             return None
@@ -702,9 +696,6 @@ class FramebyFrameCalib:
             for res in final_results:
                 if res['use_ransac'] == 0 and res['rep_err'] <= 5.:
                     return res
-            # Return the first element in the sorted list (if it's not empty)
             return final_results[0]
         else:
             return None
-
-
