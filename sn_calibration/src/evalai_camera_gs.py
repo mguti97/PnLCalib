@@ -1,20 +1,15 @@
-import numpy as np
 import zipfile
 import argparse
+import numpy as np
 import json
-import sys
 
 from tqdm import tqdm
-
-sys.path.append("sn_calibration")
-sys.path.append("sn_calibration/src")
 
 from evaluate_camera import get_polylines, scale_points, evaluate_camera_prediction
 from evaluate_extremities import mirror_labels
 
 
-
-def evaluate(gt_zip, prediction_zip, width=960, height=540):
+def evaluate(gt_zip, prediction_zip, width=1920, height=1080):
     gt_archive = zipfile.ZipFile(gt_zip, 'r')
     prediction_archive = zipfile.ZipFile(prediction_zip, 'r')
     gt_jsons = gt_archive.namelist()
@@ -28,8 +23,8 @@ def evaluate(gt_zip, prediction_zip, width=960, height=540):
     missed = 0
     for gt_json in tqdm(gt_jsons):
 
-        # split, name = gt_json.split("/")
-        # pred_name = f"{split}/camera_{name}"
+        #split, name = gt_json.split("/")
+        #pred_name = f"{split}/camera_{name}"
         pred_name = f"camera_{gt_json}"
 
         total_frames += 1
@@ -52,11 +47,11 @@ def evaluate(gt_zip, prediction_zip, width=960, height=540):
 
         confusion1, per_class_conf1, reproj_errors1 = evaluate_camera_prediction(img_prediction,
                                                                                  img_groundtruth,
-                                                                                 20)
+                                                                                 5)
 
         confusion2, per_class_conf2, reproj_errors2 = evaluate_camera_prediction(img_prediction,
                                                                                  mirror_labels(img_groundtruth),
-                                                                                 20)
+                                                                                 5)
 
         accuracy1, accuracy2 = 0., 0.
         if confusion1.sum() > 0:
@@ -84,18 +79,17 @@ def evaluate(gt_zip, prediction_zip, width=960, height=540):
             recall = confusion[0, 0] / (confusion[0, 0] + confusion[1, 0])
             recalls.append(recall)
 
-        # for line_class, errors in reproj_errors.items():
-        #     if line_class in dict_errors.keys():
-        #         dict_errors[line_class].extend(errors)
-        #     else:
-        #         dict_errors[line_class] = errors
-        #
-        # for line_class, confusion_mat in per_class_conf.items():
-        #     if line_class in per_class_confusion_dict.keys():
-        #         per_class_confusion_dict[line_class] += confusion_mat
-        #     else:
-        #         per_class_confusion_dict[line_class] = confusion_mat
+        for line_class, errors in reproj_errors.items():
+            if line_class in dict_errors.keys():
+                dict_errors[line_class].extend(errors)
+            else:
+                dict_errors[line_class] = errors
 
+        for line_class, confusion_mat in per_class_conf.items():
+            if line_class in per_class_confusion_dict.keys():
+                per_class_confusion_dict[line_class] += confusion_mat
+            else:
+                per_class_confusion_dict[line_class] = confusion_mat
 
     results = {}
     results["completeness"] = (total_frames - missed) / total_frames
@@ -105,13 +99,13 @@ def evaluate(gt_zip, prediction_zip, width=960, height=540):
     results["finalScore"] = results["completeness"] * results["meanAccuracies"]
 
 
-    # for line_class, confusion_mat in per_class_confusion_dict.items():
-    #     class_accuracy = confusion_mat[0, 0] / confusion_mat.sum()
-    #     class_recall = confusion_mat[0, 0] / (confusion_mat[0, 0] + confusion_mat[1, 0])
-    #     class_precision = confusion_mat[0, 0] / (confusion_mat[0, 0] + confusion_mat[0, 1])
-    #     results[f"{line_class}Precision"] = class_precision
-    #     results[f"{line_class}Recall"] = class_recall
-    #     results[f"{line_class}Accuracy"] = class_accuracy
+    for line_class, confusion_mat in per_class_confusion_dict.items():
+        class_accuracy = confusion_mat[0, 0] / confusion_mat.sum()
+        class_recall = confusion_mat[0, 0] / (confusion_mat[0, 0] + confusion_mat[1, 0])
+        class_precision = confusion_mat[0, 0] / (confusion_mat[0, 0] + confusion_mat[0, 1])
+        results[f"{line_class}Precision"] = class_precision
+        results[f"{line_class}Recall"] = class_recall
+        results[f"{line_class}Accuracy"] = class_accuracy
     return results
 
 
@@ -123,11 +117,7 @@ if __name__ == "__main__":
     parser.add_argument('-p', '--prediction', default="/home/fmg/results/SN23-tests/test.zip",
                         required=False, type=str,
                         help="Path to the  zip prediction folder")
-    parser.add_argument('--width', type=int, default=960)
-    parser.add_argument('--height', type=int, default=540)
 
     args = parser.parse_args()
 
-    results = evaluate(args.soccernet, args.prediction, args.width, args.height)
-    for key in results.keys():
-        print(f"{key}: {results[key]}")
+    print(evaluate(args.soccernet, args.prediction))

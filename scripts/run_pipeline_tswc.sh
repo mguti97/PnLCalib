@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Set parameters
-ROOT_DIR="datasets/TS-WorldCup/"
+ROOT_DIR="/home/mgutierrez/datasets/TS-WorldCup/"
 SPLIT="test"
 CFG="config/hrnetv2_w48.yaml"
 CFG_L="config/hrnetv2_w48_l.yaml"

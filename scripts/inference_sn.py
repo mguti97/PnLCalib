@@ -2,6 +2,7 @@ import os
 import sys
 import json
 import glob
+import time
 import yaml
 import torch
 import zipfile
@@ -145,6 +146,7 @@ if __name__ == "__main__":
 
         with zipfile.ZipFile(zip_name_pred, 'w') as zip_file:
             samples, complete = 0., 0.
+            time0 = time.time()
             for file in tqdm(files, desc="Processing Images"):
                 image = Image.open(file)
                 file_name = file.split('/')[-1].split('.')[0]
@@ -164,7 +166,7 @@ if __name__ == "__main__":
                     kp_dict, lines_dict = complete_keypoints(kp_dict[0], lines_dict[0], w=w, h=h)
 
                     cam.update(kp_dict, lines_dict)
-                    final_params_dict = cam.heuristic_voting(refine_lines=True)
+                    final_params_dict = cam.heuristic_voting(refine=False, refine_lines=True)
 
                 if final_params_dict:
                     if final_params_dict['rep_err'] <= args.max_reproj_err:
@@ -172,6 +174,8 @@ if __name__ == "__main__":
                         cam_params = final_params_dict['cam_params']
                         json_data = json.dumps(cam_params)
                         zip_file.writestr(f"camera_{file_name}.json", json_data)
+    
+    time1 = time.time()
 
     with zipfile.ZipFile(zip_name, 'w') as zip_file:
         for file in tqdm(files, desc="Processing Images"):
@@ -181,5 +185,4 @@ if __name__ == "__main__":
             zip_file.writestr(f"{file_name}.json", json_data)
 
     print(f'Completed {complete} / {samples}')
-
-
+    print(f'Frame rate {(time1-time0)/len(files)*1000} (ms)')

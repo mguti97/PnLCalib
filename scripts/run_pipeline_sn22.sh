@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Set parameters
-ROOT_DIR="calibration/"
+ROOT_DIR="/home/mgutierrez/datasets/calibration/"
 SPLIT="test"
 CFG="config/hrnetv2_w48.yaml"
 CFG_L="config/hrnetv2_w48_l.yaml"
@@ -9,9 +9,9 @@ WEIGHTS_KP="weights/SV_kp"
 WEIGHTS_L="weights/SV_lines"
 SAVE_DIR="inference/inference_3D/inference_sn22/"
 DEVICE="cuda:0"
-KP_TH=0.1611
-LINE_TH=0.3434
-MAX_REPROJ_ERR=57
+KP_TH=0.0966
+LINE_TH=0.3441
+MAX_REPROJ_ERR=100
 GT_FILE="${SAVE_DIR}${SPLIT}_main.zip"
 PRED_FILE="${SAVE_DIR}${SPLIT}_main_pred.zip"
 

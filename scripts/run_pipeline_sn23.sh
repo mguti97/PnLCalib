@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Set parameters
-ROOT_DIR="datasets/calibration-2023/"
+ROOT_DIR="/home/mgutierrez/datasets/calibration-2023/"
 SPLIT="test"
 CFG="config/hrnetv2_w48.yaml"
 CFG_L="config/hrnetv2_w48_l.yaml"

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Set parameters
-ROOT_DIR="datasets/WC-2014/"
+ROOT_DIR="/home/mgutierrez/datasets/WC-2014/"
 SPLIT="test"
 CFG="config/hrnetv2_w48.yaml"
 CFG_L="config/hrnetv2_w48_l.yaml"
@@ -9,9 +9,9 @@ WEIGHTS_KP="weights/SV_kp"
 WEIGHTS_L="weights/SV_lines"
 SAVE_DIR="inference/inference_3D/inference_wc14/"
 DEVICE="cuda:0"
-KP_TH=0.0070
-LINE_TH=0.1513
-MAX_REPROJ_ERR=83
+KP_TH=0.00561
+LINE_TH=0.14599
+MAX_REPROJ_ERR=44
 GT_FILE="${SAVE_DIR}${SPLIT}_main.zip"
 PRED_FILE="${SAVE_DIR}${SPLIT}_main_pred.zip"
 

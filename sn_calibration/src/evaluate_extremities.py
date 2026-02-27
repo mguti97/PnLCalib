@@ -34,6 +34,8 @@ def mirror_labels(lines_dict):
     """
     mirrored_dict = dict()
     for line_class, value in lines_dict.items():
+        if line_class == 'Goal left post left':
+            line_class = 'Goal left post left '
         mirrored_dict[SoccerPitch.symetric_classes[line_class]] = value
     return mirrored_dict
 

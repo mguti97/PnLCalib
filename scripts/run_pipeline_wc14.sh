@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Set parameters
-ROOT_DIR="datasets/WC-2014/"
+ROOT_DIR="/home/mgutierrez/datasets/WC-2014/"
 SPLIT="test"
 CFG="config/hrnetv2_w48.yaml"
 CFG_L="config/hrnetv2_w48_l.yaml"
@@ -10,7 +10,7 @@ WEIGHTS_L="weights/SV_FT_WC14_lines"
 SAVE_DIR="inference/inference_2D/inference_wc14/"
 KP_TH=0.1274
 LINE_TH=0.1439
-DEVICE="cuda:0"
+DEVICE="cuda:3"
 PRED_FILE="${SAVE_DIR}${SPLIT}_pred.zip"
 
 # Run inference script
