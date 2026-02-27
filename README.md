@@ -3,13 +3,16 @@ Extension of the previous paper "No Bells, Just Whistles: Sports Field Registrat
 
 <div align="center">
     
-
 [![Conference](https://img.shields.io/badge/Preprint-SSRN-6b8bc7.svg?style=for-the-badge)](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4998149)
     
 <p align="center"><img src=figures/FieldReconstruction-1.png  width=70% height=70%></p>
 </div>
 
-### 🚀 Updates (06/06/2025)
+### 🚀 Updates (2026-01-03)
+
+- ✅ **Weighting parameter $\alpha$** added to the PnL refinement module, improving performance across all benchmarks.
+
+### 🚀 Updates (2025-06-06)
 
 - ✅ **Support for Distributed GPU Training** for scalable model training across multiple devices.
 
