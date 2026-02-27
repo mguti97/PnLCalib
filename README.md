@@ -163,7 +163,7 @@ python train.py --cfg config/hrnetv2_w48.yaml --dataset SoccerNet --root_dir dat
 ```shell
 python train_l.py --cfg config/hrnetv2_w48_l.yaml --dataset SoccerNet --root_dir datasets/calibration-2023/ --save_dir weights/MV_line_exp1 
 ```
-Options for `--dataset` argument are: `[SoccerNet, WorldCup2014, TSWorldCup]`
+Options for `--dataset` argument are: `[SoccerNet, WorldCup2014, TSWorldCup, WorldPose]`
 
 Additional available arguments for both keypoint and line detection training:
 - `--cuda`: CUDA device index (default: 'cuda:0')
