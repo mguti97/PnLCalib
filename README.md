@@ -2,7 +2,9 @@
 Extension of the previous paper "No Bells, Just Whistles: Sports Field Registration by Leveraging Geometric Properties"
 
 <div align="center">
-    
+
+[![Conference](https://img.shields.io/badge/CVIU-PDF-FBBC04?style=for-the-badge&logo=google-slides&logoColor=black)](https://doi.org/10.1016/j.cviu.2026.104712)
+[![arXiv](https://img.shields.io/badge/arXiv-2404.08401-b31b1b.svg?style=for-the-badge)](https://arxiv.org/abs/2404.08401v2)
 [![Conference](https://img.shields.io/badge/Preprint-SSRN-6b8bc7.svg?style=for-the-badge)](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4998149)
     
 <p align="center"><img src=figures/FieldReconstruction-1.png  width=70% height=70%></p>
