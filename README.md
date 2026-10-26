@@ -46,6 +46,7 @@ Extension of the previous paper "No Bells, Just Whistles: Sports Field Registrat
 - [Training](#training)
 - [Requirements](#requirements)
 - [Citation](#citation)
+- [License](#license)
 
 <hr>  
 
@@ -61,6 +62,8 @@ module is applied to further refine the calibration estimate by jointly using de
 
 ## Weights
 Download the keypoints and line detection model weights for both single-view and multiple-view configurations. Our models are pre-trained on the SoccerNet distribution and further finetuned on the WC14 and TSWC datasets for enhanced performance.
+
+All released weights are licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) (see [License](#license)).
 
 Single-View
 | Model | Finetuned | Link |
@@ -212,3 +215,31 @@ pip install -r requirements.txt
 }
 ```
 
+<hr>
+
+## License
+
+**Code.** PnLCalib is free software, licensed under the GNU General Public
+License, version 2 or (at your option) any later version
+(`SPDX-License-Identifier: GPL-2.0-or-later`). See [LICENSE](LICENSE).
+This makes the code compatible with GPLv3 and AGPLv3 projects.
+
+**Model weights.** All pre-trained weights published under
+[Releases](https://github.com/mguti97/PnLCalib/releases) (`SV_*`, `MV_*`,
+including the fine-tuned variants) are licensed under
+[Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/).
+You may use, redistribute and bundle the unmodified or modified weights for
+any purpose, including commercial use, provided you give attribution. The
+preferred attribution is the citation above. The base models were trained on
+the SoccerNet-Calibration dataset under a research agreement that has since
+expired; the weights contain no footage and carry no further restrictions.
+
+**Third-party code.** The following parts are not covered by the licences
+above and remain under their original terms:
+
+- `model/cls_hrnet.py` and `model/cls_hrnet_l.py` are derived from
+  [HRNet-Image-Classification](https://github.com/HRNet/HRNet-Image-Classification)
+  (Copyright (c) Microsoft, MIT License).
+- `sn_calibration/` is taken from
+  [SoccerNet/sn-calibration](https://github.com/SoccerNet/sn-calibration)
+  and is included for evaluation purposes only.

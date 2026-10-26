@@ -1,3 +1,12 @@
+# ------------------------------------------------------------------------------
+# Copyright (c) Microsoft
+# Licensed under the MIT License.
+# Written by Bin Xiao (Bin.Xiao@microsoft.com)
+# Modified by Ke Sun (sunk@mail.ustc.edu.cn)
+# Source: https://github.com/HRNet/HRNet-Image-Classification
+# Modified for PnLCalib by Marc Gutiérrez-Pérez
+# ------------------------------------------------------------------------------
+
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
